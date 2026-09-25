@@ -115,6 +115,23 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
 .legend i.p2{background:var(--amber)}
 .legend i.p3{background:var(--ink-3)}
 
+/* backlog cards (seção 03) — mais compactos, sem checklist */
+.bklog{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+.bk{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--ink-3);border-radius:10px;padding:14px 17px;display:flex;flex-direction:column;gap:8px}
+.bk.sys{border-left-color:var(--brand)}
+.bk.pro{border-left-color:#7B2CBF}
+.bk .bkh{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.bk .bkn{font-family:Quicksand,sans-serif;font-weight:700;font-size:12.5px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--rule);border-radius:5px;padding:2px 8px;flex:none;font-variant-numeric:tabular-nums}
+.bk .bkt{font-family:Quicksand,sans-serif;font-weight:700;font-size:15px;letter-spacing:-.006em;flex:1;min-width:200px;line-height:1.35}
+.bk .bkd{font-size:13.5px;color:var(--ink-2);line-height:1.58}
+.bk .bkd b{color:var(--ink)}
+.bkgroup{margin-top:22px}
+.bkgroup > .bkhd{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);margin-bottom:2px}
+.bkgroup > .bkhd .bkdot{width:9px;height:9px;border-radius:2px;flex:none}
+.bkgroup > .bkhd .bkdot.sys{background:var(--brand)}
+.bkgroup > .bkhd .bkdot.pro{background:#7B2CBF}
+.bkgroup > .bksub{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin-bottom:4px}
+
 .foot{padding-block:30px 0;margin-top:34px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-3);line-height:1.65}
 :focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 @media (max-width:680px){
@@ -129,10 +146,11 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
   <h1>Check-list para o desenvolvedor</h1>
   <p class="deck">7 gaps entre a API <code>/maintenance/</code> e o Processo v2.1. Cada item indica se a origem do problema está no <b>Sistema</b> (Sapron não implementa) ou no <b>Processo</b> (regra ainda em aberto).</p>
   <div class="badges">
-    <span class="badge b">v1.1 · 25/09/2026</span>
+    <span class="badge b">v1.2 · 25/09/2026</span>
     <span class="badge r">4 críticos</span>
     <span class="badge a">2 médios</span>
     <span class="badge g">1 leve</span>
+    <span class="badge b">+ 9 backlog</span>
   </div>
 </header>
 
@@ -344,7 +362,118 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
   </div>
 </section>
 
-<p class="foot">v1.0 · 25/09/2026 · <b>Ray</b> (BackOffice Franquias) · complemento técnico ao Processo de Manutenção Recorrente v2.1.</p>
+<section>
+  <div class="shead"><span class="sn">03</span><h2>Backlog adicional · análise 25/09</h2></div>
+  <p class="sub">Achados complementares aos 7 gaps da seção 01. Aqui não há critério de aceite ainda — cada item precisa de conversa antes de virar tarefa. Separado entre o que é do <b>Sistema</b> (avaliar com o dev, provável entrada em sprint futura) e o que é do <b>Processo</b> (decisão de retro, não é do dev).</p>
+
+  <div class="bkgroup">
+    <div class="bkhd"><span class="bkdot sys"></span>Sistema · para avaliar com o dev</div>
+    <p class="bksub">Reconhecidos no §11 do processo v2.1 como "onde o sistema ainda não acompanha", mais alguns achados novos.</p>
+    <div class="bklog">
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S1</span><span class="bkt">Agente de fechamento por despesa (rodando de hora em hora)</span></div>
+        <p class="bkd">Reconhecido no §11. Despesa lançada com o item da regra deveria fechar o card em minutos, não em varredura diária. <b>Impacto:</b> o report da sexta sempre mostra cards "presos" que já foram executados e pagos — falso gargalo. <b>Sugestão técnica:</b> trigger no <code>financial_expenses</code> (ou webhook) que casa despesa ↔ card aberto do mesmo item/imóvel/ciclo e move pra "Finalizado".</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S2</span><span class="bkt">Upload de evidência com campos estruturados</span></div>
+        <p class="bkd">Antes de agente de visão computacional (§11), uma etapa intermediária mais barata: no upload, exigir <code>tipo=conclusão|parcial</code>, <code>data_servico</code> e <code>cnpj_prestador</code>. Faz 70% da conferência humana virar checklist e alimenta o gap 06 (validação de certificado).</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S3</span><span class="bkt">Anexo NÃO deve mover card sozinho para "Aguardando aprovação"</span></div>
+        <p class="bkd">Hoje qualquer arquivo (§6, "Atenção") joga o card na fila de aprovação, mesmo serviço pela metade. <b>Consequência:</b> Manutenção precisa devolver muita coisa que nunca deveria ter chegado. <b>Sugestão:</b> botão explícito "concluído" separado do upload — anexo sem esse clique fica em "Em execução".</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S4</span><span class="bkt">Bloqueio 01/12 – 31/03 nativo no calendário</span></div>
+        <p class="bkd">§11 admite: "varredura roda o ano inteiro; contorno = pausar as regras em 01/12 e reativar em 01/04". Sem flag nativa isso vira exceção manual todo ano. <b>Sugestão:</b> campo <code>maintenance_rule.freeze_window</code> que bloqueia abertura e vencimento no intervalo definido.</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S5</span><span class="bkt">Fonte única de elegibilidade (Airbnb vs. cadastro de amenities)</span></div>
+        <p class="bkd">Dupla verdade hoje: cadastro do Sapron (78% falso, §11) vs. anúncio do Airbnb (fonte real, §7.4). Deprecar o campo de amenities para manutenção recorrente ou sincronizar automático via data lake (<code>listing_status</code>) toda madrugada. Enquanto existirem duas fontes, indefinidos vão continuar aparecendo.</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S6</span><span class="bkt">Métricas de saúde do ciclo dentro do Sapron</span></div>
+        <p class="bkd">Hoje o report da sexta é montado fora do sistema. Faltam nativos: tempo médio abertura→evidência por franquia, tempo médio evidência→aprovação, % de ciclos concluídos por item. <b>Sugestão:</b> endpoint <code>GET /api/v1/maintenance/metrics?franchise_id=&amp;cycle=</code>.</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S7</span><span class="bkt">Itens "Pendente" ganham visibilidade sem virar card</span></div>
+        <p class="bkd">Senha de fechadura, pilhas, filtro de água, caixa d'água (§7.1) hoje somem porque não abrem card — não existe métrica de "eventos ignorados". <b>Sugestão:</b> contador leve no cadastro do imóvel (checkouts desde a última troca de senha, meses desde o último alerta de bateria). Sem card, mas visível.</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S8</span><span class="bkt">Régua de atraso: envio automático até D+21 (não só D+7)</span></div>
+        <p class="bkd">Complemento do gap 05 da seção 01. Hoje o §9 diz que D+7 é lembrete automático do Sapron, mas D+14 (BackOffice aciona o gestor) e D+21 (Coordenação assume) dependem de alguém ver o report da sexta. Enquanto o processo não fecha a tratativa do D+21 (decisão 3), pelo menos os disparos de notificação nos buckets deviam ser nativos.</p>
+      </div>
+
+      <div class="bk sys">
+        <div class="bkh"><span class="bkn">S9</span><span class="bkt">Simulação de carga: setembro tem ~3.300 cards em 1 semana</span></div>
+        <p class="bkd">Cálculo rápido: 3 itens simultâneos em setembro (AC · filtro exaustor · filtro água) × ~1.100 imóveis pós-gate = ~3.300 cards abertos numa única segunda-feira. <b>Pedido ao dev:</b> confirmar se a UX de listagem (filtro, busca, paginação, permissões por franquia) e o backend aguentam esse pico antes do escalar. Se não, priorizar antes de setembro/2027.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bkgroup">
+    <div class="bkhd"><span class="bkdot pro"></span>Processo · para próxima retro (não é do dev)</div>
+    <p class="bksub">Compartilhado com o dev só como contexto — enquanto essas decisões não fecharem, alguns gaps da seção 01 ficam parciais.</p>
+    <div class="bklog">
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P1</span><span class="bkt">Levantamento municipal da RDC 52/2009 e Portaria nº 5/2017</span></div>
+        <p class="bkd">§11: "ninguém checou a exigência praça a praça". Risco jurídico latente pra Seazone, não pra franquia. Varredura por município nas cidades top-10 antes da próxima retro tira o processo do escuro.</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P2</span><span class="bkt">Interface com Central de Ocorrências para franquias reincidentes</span></div>
+        <p class="bkd">Franquia que estoura prazo repetidamente hoje não gera ocorrência. Sem consequência real depois do D+21, a régua de atraso é cosmética. <b>Retro decide:</b> reincidência = ocorrência Média? Grave? Direta?</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P3</span><span class="bkt">Tratativa do D+21 (decisão 3 em aberto)</span></div>
+        <p class="bkd">§9 diz "Coordenação assume o caso" — sem definir como. Liga, escala, reatribui, multa? Sem padrão, cada caso vira negociação. Bloqueio direto do gap 05 da seção 01.</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P4</span><span class="bkt">SLA de resposta do gestor da franquia após D+14</span></div>
+        <p class="bkd">BackOffice aciona o gestor no D+14, mas o processo não define quantos dias o gestor tem pra destravar. No D+21 ninguém sabe se ele foi omisso ou se estava tratando.</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P5</span><span class="bkt">Cadência ter-qui-sáb pode ser overkill pra franquia pequena</span></div>
+        <p class="bkd">3 avisos por franqueado antes de abrir card faz sentido pra quem tem 30 imóveis. Quem tem 1-2 recebe spam. <b>Vale testar:</b> cadência única (só sábado) pra franquia com &lt;5 imóveis e medir se atrasa mais.</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P6</span><span class="bkt">Fluxo financeiro quando o custo é do proprietário</span></div>
+        <p class="bkd">§7.8: "segue o caminho de qualquer manutenção do imóvel". Mas isso não fecha o card automaticamente, porque a despesa não é de manutenção recorrente. Regra precisa ser explícita — hoje esse caso trava o gap S1 (agente de fechamento).</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P7</span><span class="bkt">73 imóveis "indefinidos" só no ar-condicionado</span></div>
+        <p class="bkd">§7.4 aceita indefinido sem tratativa. Multiplicando por 10 itens do ano = ~700 pontos-cegos/ano. <b>Retro decide:</b> quem cura indefinido, em quanto tempo, com que fonte?</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P8</span><span class="bkt">Report da sexta: só Ray e Carol veem</span></div>
+        <p class="bkd">§10. Se Carol viaja e Ray está em call, ninguém age até segunda. Cópia pra Coordenação (dona das regras) + SLA de leitura resolvem sem custo.</p>
+      </div>
+
+      <div class="bk pro">
+        <div class="bkh"><span class="bkn">P9</span><span class="bkt">Sem KPI de cabeceira para o processo</span></div>
+        <p class="bkd">Qual é a meta? % de ciclos completos no mês? Tempo médio? Sem número, "está indo bem" é opinião. Sugestão: definir 2 KPIs na próxima retro e ligar no hub de KPIs.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<p class="foot">v1.2 · 25/09/2026 · <b>Ray</b> (BackOffice Franquias) · complemento técnico ao Processo de Manutenção Recorrente v2.1. · Seção 03 adicionada em 25/09 (análise de melhorias sistema × processo).</p>
 
 </div>
 
