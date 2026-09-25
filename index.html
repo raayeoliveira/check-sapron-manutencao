@@ -96,10 +96,15 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
 .gp .item label{cursor:pointer;color:var(--ink-2)}
 .gp .item input:checked + label{text-decoration:line-through;color:var(--ink-3)}
 
-.gp .btn-done{align-self:flex-end;font-family:Inter,sans-serif;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--green-line);background:var(--green-soft);color:var(--green-ink);cursor:pointer;margin-top:6px}
+.gp .btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.gp .btn-done,.gp .btn-claude{font-family:Inter,sans-serif;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer}
+.gp .btn-done{border:1px solid var(--green-line);background:var(--green-soft);color:var(--green-ink)}
 .gp[data-done="1"] .btn-done{background:var(--surface-2);border-color:var(--rule-2);color:var(--ink-2)}
 .gp[data-done="1"] .btn-done::before{content:"↺ Reabrir"}
 .gp:not([data-done="1"]) .btn-done::before{content:"✓ Marcar como resolvido"}
+.gp .btn-claude{border:1px solid var(--brand-line);background:var(--brand-soft);color:var(--brand-ink);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.gp .btn-claude:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+.gp .btn-claude::before{content:"✦"}
 
 .note{border-radius:11px;padding:14px 17px;font-size:14px;margin-top:20px;line-height:1.58;background:var(--brand-soft);border:1px solid var(--brand-line)}
 .note.warn{background:var(--amber-soft);border-color:var(--amber-line)}
@@ -144,9 +149,9 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
 <header class="mast">
   <p class="kicker">Seazone · Sapron · API v1 · Manutenção Recorrente</p>
   <h1>Check-list para o desenvolvedor</h1>
-  <p class="deck">7 gaps entre a API <code>/maintenance/</code> e o Processo v2.1. Cada item indica se a origem do problema está no <b>Sistema</b> (Sapron não implementa) ou no <b>Processo</b> (regra ainda em aberto).</p>
+  <p class="deck">7 gaps entre a API <code>/maintenance/</code> e o Processo v2.1. Cada item indica se a origem do problema está no <b>Sistema</b> (Sapron não implementa) ou no <b>Processo</b> (regra ainda em aberto). Cada gap tem botão <b>✦ Enviar ao Claude</b> — abre uma conversa nova com todo o contexto e os critérios de aceite prontos pra virar código.</p>
   <div class="badges">
-    <span class="badge b">v1.2 · 25/09/2026</span>
+    <span class="badge b">v1.3 · 25/09/2026</span>
     <span class="badge r">4 críticos</span>
     <span class="badge a">2 médios</span>
     <span class="badge g">1 leve</span>
@@ -161,6 +166,7 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
   </div>
   <div class="track"><div class="fill" id="fill" style="width:0%"></div></div>
   <div class="actions">
+    <button onclick="sendAllToClaude()" style="border-color:var(--brand);color:var(--brand-ink);background:var(--brand-soft)">✦ Enviar pendentes ao Claude</button>
     <button onclick="resetAll()">Limpar tudo</button>
     <button onclick="window.print()">Imprimir</button>
   </div>
@@ -201,7 +207,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <div class="item"><input type="checkbox" id="i1b"><label for="i1b">Campo <code>property.activation_date</code> exposto no payload do card</label></div>
         <div class="item"><input type="checkbox" id="i1c"><label for="i1c">Regra "ativado dez–mar entra só em abr" documentada no swagger</label></div>
       </div>
-      <button class="btn-done" onclick="toggleDone(1)"></button>
+      <div class="btns">
+        <button class="btn-claude" onclick="sendGapToClaude(this)">Enviar ao Claude</button>
+        <button class="btn-done" onclick="toggleDone(1)"></button>
+      </div>
     </div>
 
     <div class="gp" data-id="2">
@@ -224,7 +233,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <div class="item"><input type="checkbox" id="i2c"><label for="i2c">Payload por imóvel inclui <code>barred_at_question</code> quando aplicável</label></div>
         <div class="item"><input type="checkbox" id="i2d"><label for="i2d">Ciclo (item + mês) é parâmetro obrigatório</label></div>
       </div>
-      <button class="btn-done" onclick="toggleDone(2)"></button>
+      <div class="btns">
+        <button class="btn-claude" onclick="sendGapToClaude(this)">Enviar ao Claude</button>
+        <button class="btn-done" onclick="toggleDone(2)"></button>
+      </div>
     </div>
 
     <div class="gp" data-id="3">
@@ -248,7 +260,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <div class="item"><input type="checkbox" id="i3c"><label for="i3c">Log de envio auditável (quem recebeu, quando, canal)</label></div>
         <div class="item"><input type="checkbox" id="i3d"><label for="i3d">Canal e template do texto vêm do BackOffice (decisão 2 em aberto)</label></div>
       </div>
-      <button class="btn-done" onclick="toggleDone(3)"></button>
+      <div class="btns">
+        <button class="btn-claude" onclick="sendGapToClaude(this)">Enviar ao Claude</button>
+        <button class="btn-done" onclick="toggleDone(3)"></button>
+      </div>
     </div>
 
     <div class="gp" data-id="4">
@@ -271,7 +286,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <div class="item"><input type="checkbox" id="i4c"><label for="i4c">Retorno de devolução aplica piso de 3 du</label></div>
         <div class="item"><input type="checkbox" id="i4d"><label for="i4d">Cálculo de vencimento leva pausa em conta</label></div>
       </div>
-      <button class="btn-done" onclick="toggleDone(4)"></button>
+      <div class="btns">
+        <button class="btn-claude" onclick="sendGapToClaude(this)">Enviar ao Claude</button>
+        <button class="btn-done" onclick="toggleDone(4)"></button>
+      </div>
     </div>
 
     <div class="gp" data-id="5">
@@ -295,7 +313,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <div class="item"><input type="checkbox" id="i5c"><label for="i5c">D+14 marca BackOffice, D+21 marca Coordenação (destinatário parametrizável)</label></div>
         <div class="item"><input type="checkbox" id="i5d"><label for="i5d">Pós-D+21 reenvia a cada 7d enquanto card estiver aberto</label></div>
       </div>
-      <button class="btn-done" onclick="toggleDone(5)"></button>
+      <div class="btns">
+        <button class="btn-claude" onclick="sendGapToClaude(this)">Enviar ao Claude</button>
+        <button class="btn-done" onclick="toggleDone(5)"></button>
+      </div>
     </div>
 
     <div class="gp" data-id="6">
@@ -318,7 +339,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <div class="item"><input type="checkbox" id="i6c"><label for="i6c">Flag <code>certificate_status</code>: ok / cnpj_inativo / sem_rt / data_fora_ciclo</label></div>
         <div class="item"><input type="checkbox" id="i6d"><label for="i6d">Devolve automático se status ≠ ok</label></div>
       </div>
-      <button class="btn-done" onclick="toggleDone(6)"></button>
+      <div class="btns">
+        <button class="btn-claude" onclick="sendGapToClaude(this)">Enviar ao Claude</button>
+        <button class="btn-done" onclick="toggleDone(6)"></button>
+      </div>
     </div>
 
     <div class="gp" data-id="7">
@@ -340,7 +364,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <div class="item"><input type="checkbox" id="i7b"><label for="i7b">Cadastro do imóvel mostra próxima manutenção prevista por item</label></div>
         <div class="item"><input type="checkbox" id="i7c"><label for="i7c">Cron mensal só cria card se não houver agendamento aberto</label></div>
       </div>
-      <button class="btn-done" onclick="toggleDone(7)"></button>
+      <div class="btns">
+        <button class="btn-claude" onclick="sendGapToClaude(this)">Enviar ao Claude</button>
+        <button class="btn-done" onclick="toggleDone(7)"></button>
+      </div>
     </div>
 
   </div>
@@ -473,7 +500,7 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
   </div>
 </section>
 
-<p class="foot">v1.2 · 25/09/2026 · <b>Ray</b> (BackOffice Franquias) · complemento técnico ao Processo de Manutenção Recorrente v2.1. · Seção 03 adicionada em 25/09 (análise de melhorias sistema × processo).</p>
+<p class="foot">v1.3 · 25/09/2026 · <b>Ray</b> (BackOffice Franquias) · complemento técnico ao Processo de Manutenção Recorrente v2.1. · Seção 03 adicionada em 25/09 (análise de melhorias sistema × processo).</p>
 
 </div>
 
@@ -502,6 +529,79 @@ function resetAll(){
   document.querySelectorAll('.gp').forEach(el=>el.dataset.done='0');
   document.querySelectorAll('input[type=checkbox]').forEach(i=>i.checked=false);
   updateProg();
+}
+
+/* ========= Envio ao Claude ========= */
+const CLAUDE_URL='https://claude.ai/new?q=';
+const REPO_URL='https://github.com/raayeoliveira/check-sapron-manutencao';
+
+function buildGapPrompt(el){
+  const id=el.dataset.id;
+  const title=el.querySelector('.gtxt').textContent.trim();
+  const prio=el.querySelector('.prio')?.textContent.trim()||'';
+  const origins=[...el.querySelectorAll('.origin')].map(o=>o.textContent.trim()).join(' + ');
+  const rows=[...el.querySelectorAll('.body .row')].map(r=>{
+    const k=r.querySelector('.rk').textContent.trim();
+    const v=r.querySelector('.rv').textContent.trim();
+    return `- **${k}:** ${v}`;
+  }).join('\n');
+  const criterios=[...el.querySelectorAll('.todo .item label')].map((l,i)=>`- [ ] ${l.textContent.trim()}`).join('\n');
+  return `Você é dev do Sapron (Django/DRF · API v1 de Manutenção Recorrente). Preciso implementar o gap abaixo, extraído do check-list oficial da Ray (BackOffice Franquias).
+
+## Gap ${id} · ${title}
+**Prioridade:** ${prio}
+**Origem:** ${origins}
+
+### Contexto
+${rows}
+
+### Critério de aceite
+${criterios}
+
+### Referências
+- Check-list completo: ${REPO_URL}
+- Processo de Manutenção Recorrente v2.1 (17/09/2026) — autoria Ray, revisão técnica Vinicius Satores
+- API atual: https://api.sapron.com.br/api/v1/maintenance/
+
+### Peço:
+1. Proponha o desenho da mudança (models, serializers, endpoints, migrations) e cite os arquivos-alvo prováveis.
+2. Liste riscos, impactos em endpoints existentes e o que precisa de decisão do BackOffice antes de codar.
+3. Escreva o código pronto pra PR, com testes cobrindo cada critério de aceite acima.`;
+}
+
+function sendGapToClaude(btn){
+  const el=btn.closest('.gp');
+  const prompt=buildGapPrompt(el);
+  window.open(CLAUDE_URL+encodeURIComponent(prompt),'_blank','noopener');
+}
+
+function sendAllToClaude(){
+  const pendentes=[...document.querySelectorAll('.gp')].filter(g=>g.dataset.done!=='1');
+  if(!pendentes.length){alert('Não há gaps pendentes. Todos resolvidos.');return;}
+  const lista=pendentes.map(el=>{
+    const id=el.dataset.id;
+    const title=el.querySelector('.gtxt').textContent.trim();
+    const prio=el.querySelector('.prio')?.textContent.trim()||'';
+    const criterios=[...el.querySelectorAll('.todo .item label')].map(l=>`  - [ ] ${l.textContent.trim()}`).join('\n');
+    return `### Gap ${id} · ${title}\n_${prio}_\n${criterios}`;
+  }).join('\n\n');
+  const prompt=`Você é dev do Sapron (Django/DRF · API v1 de Manutenção Recorrente). Segue o backlog de ${pendentes.length} gap(s) pendente(s) do check-list oficial (Ray · BackOffice Franquias).
+
+Preciso que você:
+1. Priorize os itens por dependência técnica (o que precisa vir antes).
+2. Para cada gap, proponha o desenho (models, endpoints, migrations) e cite arquivos-alvo prováveis.
+3. Liste os itens que dependem de decisão do BackOffice antes de codar.
+4. Depois, comece pelo primeiro em código pronto pra PR, com testes cobrindo cada critério.
+
+## Backlog pendente
+
+${lista}
+
+## Referências
+- Check-list completo: ${REPO_URL}
+- Processo de Manutenção Recorrente v2.1 (17/09/2026)
+- API atual: https://api.sapron.com.br/api/v1/maintenance/`;
+  window.open(CLAUDE_URL+encodeURIComponent(prompt),'_blank','noopener');
 }
 
 // restore
