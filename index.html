@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check-list · Sapron × Manutenção Recorrente</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F3F6F9; --surface:#FFFFFF; --surface-2:#EBF0F5; --surface-3:#E1E7ED;
+  --ink:#151B26; --ink-2:#51626F; --ink-3:#888E9B;
+  --rule:#E1E7ED; --rule-2:#C0CDDD;
+  --brand:#0D4BD0; --brand-ink:#0D4BD0; --brand-soft:#F0F2FA; --brand-line:#C2C8F1;
+  --green:#41B592; --green-ink:#219653; --green-soft:#D9F0E9; --green-line:#BFEBDD;
+  --coral:#EB6957; --coral-ink:#CF4F44; --coral-soft:#F7E1E1; --coral-line:#E7B3B3;
+  --amber:#F5A623; --amber-ink:#51626F; --amber-soft:#FFF3E0; --amber-line:#FFCD80;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#151B26; --surface:#1B212C; --surface-2:#232B38; --surface-3:#2B3442;
+    --ink:#F3F6F9; --ink-2:#B2BBC3; --ink-3:#888E9B;
+    --rule:#2E3644; --rule-2:#3D4756;
+    --brand:#3CC3EE; --brand-ink:#3CC3EE; --brand-soft:#132A46; --brand-line:#2A5480;
+    --green:#54DBB2; --green-ink:#54DBB2; --green-soft:#16332B; --green-line:#2F6A5C;
+    --coral:#F0655A; --coral-ink:#F0655A; --coral-soft:#3A2220; --coral-line:#7D423A;
+    --amber:#FFCD80; --amber-ink:#FFCD80; --amber-soft:#332818; --amber-line:#7A5C2E;
+  }
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14.5px;line-height:1.62;margin:0;padding-inline:20px;padding-block:0 68px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto}
+h1,h2,h3,.dsp{font-family:Quicksand,"Trebuchet MS",sans-serif;text-wrap:balance;margin:0;line-height:1.2;font-weight:700}
+p{margin:0}
+b{font-weight:600}
+a{color:var(--brand-ink)}
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;background:var(--surface-2);border:1px solid var(--rule);border-radius:5px;padding:1px 6px}
+
+.mast{padding-block:38px 26px;display:flex;flex-direction:column;gap:15px;border-bottom:3px solid var(--brand)}
+.kicker{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--brand-ink)}
+.mast h1{font-size:clamp(26px,5.2vw,40px);letter-spacing:-.02em}
+.mast .deck{font-size:16px;color:var(--ink-2);max-width:66ch;line-height:1.58}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.badge.g{background:var(--green-soft);color:var(--green-ink);border:1px solid var(--green-line)}
+.badge.a{background:var(--amber-soft);color:var(--amber-ink);border:1px solid var(--amber-line)}
+.badge.b{background:var(--brand-soft);color:var(--brand-ink);border:1px solid var(--brand-line)}
+.badge.r{background:var(--coral-soft);color:var(--coral-ink);border:1px solid var(--coral-line)}
+
+section{padding-block:36px 6px}
+section + section{border-top:1px solid var(--rule)}
+.shead{display:flex;gap:14px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.shead .sn{font-family:Quicksand,sans-serif;font-size:27px;font-weight:700;color:var(--brand);line-height:1;flex:none;font-variant-numeric:tabular-nums}
+h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
+.sub{color:var(--ink-2);margin-top:4px;max-width:72ch;font-size:15px}
+
+/* progress */
+.prog{margin-top:20px;background:var(--surface);border:1px solid var(--rule);border-radius:11px;padding:15px 17px;display:flex;flex-direction:column;gap:9px}
+.prog .ph{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.prog .pv{font-family:Quicksand,sans-serif;font-weight:700;font-size:20px;font-variant-numeric:tabular-nums}
+.prog .pl{font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.prog .track{height:8px;background:var(--surface-3);border-radius:999px;overflow:hidden}
+.prog .fill{height:100%;background:var(--brand);border-radius:999px;transition:width .3s ease}
+.prog .actions{display:flex;gap:9px;margin-top:4px;flex-wrap:wrap}
+.prog button{font-family:Inter,sans-serif;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--rule-2);background:var(--surface-2);color:var(--ink);cursor:pointer}
+.prog button:hover{border-color:var(--brand);color:var(--brand-ink)}
+
+/* gap card */
+.gaps{display:flex;flex-direction:column;gap:14px;margin-top:22px}
+.gp{background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--coral);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;transition:opacity .2s}
+.gp[data-done="1"]{border-left-color:var(--green);opacity:.7}
+.gp[data-done="1"] .gtxt{text-decoration:line-through;color:var(--ink-3)}
+.gp .gh{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.gp .gnn{font-family:Quicksand,sans-serif;font-weight:700;font-size:14px;color:var(--coral-ink);background:var(--coral-soft);border:1px solid var(--coral-line);border-radius:6px;padding:2px 9px;flex:none}
+.gp[data-done="1"] .gnn{color:var(--green-ink);background:var(--green-soft);border-color:var(--green-line)}
+.gp .gtxt{font-family:Quicksand,sans-serif;font-weight:700;font-size:16.5px;letter-spacing:-.008em;flex:1;min-width:200px}
+.gp .prio{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.gp .prio.p1{background:var(--coral-soft);color:var(--coral-ink);border:1px solid var(--coral-line)}
+.gp .prio.p2{background:var(--amber-soft);color:var(--amber-ink);border:1px solid var(--amber-line)}
+.gp .prio.p3{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--rule-2)}
+
+.gp .body{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;padding-top:6px}
+.gp .row{display:flex;flex-direction:column;gap:3px}
+.gp .rk{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.gp .rv{font-size:13.5px;line-height:1.5;color:var(--ink)}
+.gp .rv.dim{color:var(--ink-2)}
+
+.gp .todo{margin-top:6px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:7px}
+.gp[data-done="1"] .todo{border-top-color:var(--green-line)}
+.gp .todo .tl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-ink);margin-bottom:2px}
+.gp .item{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.55}
+.gp .item input[type=checkbox]{margin-top:3px;accent-color:var(--brand);width:16px;height:16px;cursor:pointer;flex:none}
+.gp .item label{cursor:pointer;color:var(--ink-2)}
+.gp .item input:checked + label{text-decoration:line-through;color:var(--ink-3)}
+
+.gp .btn-done{align-self:flex-end;font-family:Inter,sans-serif;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--green-line);background:var(--green-soft);color:var(--green-ink);cursor:pointer;margin-top:6px}
+.gp[data-done="1"] .btn-done{background:var(--surface-2);border-color:var(--rule-2);color:var(--ink-2)}
+.gp[data-done="1"] .btn-done::before{content:"↺ Reabrir"}
+.gp:not([data-done="1"]) .btn-done::before{content:"✓ Marcar como resolvido"}
+
+.note{border-radius:11px;padding:14px 17px;font-size:14px;margin-top:20px;line-height:1.58;background:var(--brand-soft);border:1px solid var(--brand-line)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber-line)}
+.note.stop{background:var(--coral-soft);border-color:var(--coral-line)}
+.note .lbl{display:block;font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:7px;color:var(--brand-ink)}
+.note.warn .lbl{color:var(--ink-2)}
+.note.stop .lbl{color:var(--coral-ink)}
+
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;font-size:13px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.legend i.p1{background:var(--coral)}
+.legend i.p2{background:var(--amber)}
+.legend i.p3{background:var(--ink-3)}
+
+.foot{padding-block:30px 0;margin-top:34px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-3);line-height:1.65}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+@media (max-width:680px){
+  .gp .body{grid-template-columns:1fr}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="kicker">Seazone · Sapron · API v1 · Manutenção Recorrente</p>
+  <h1>Check-list para o desenvolvedor</h1>
+  <p class="deck">7 gaps entre a API <code>/maintenance/</code> e o Processo v2.1. Cada item lista o que falta implementar, referência do processo e critério de aceite.</p>
+  <div class="badges">
+    <span class="badge b">v1.0 · 25/09/2026</span>
+    <span class="badge r">4 críticos</span>
+    <span class="badge a">2 médios</span>
+    <span class="badge g">1 leve</span>
+  </div>
+</header>
+
+<div class="prog" id="prog">
+  <div class="ph">
+    <span class="pl">Progresso</span>
+    <span class="pv"><span id="done">0</span> / <span id="total">7</span></span>
+  </div>
+  <div class="track"><div class="fill" id="fill" style="width:0%"></div></div>
+  <div class="actions">
+    <button onclick="resetAll()">Limpar tudo</button>
+    <button onclick="window.print()">Imprimir</button>
+  </div>
+</div>
+
+<div class="legend">
+  <span><i class="p1"></i>P1 · trava ciclo</span>
+  <span><i class="p2"></i>P2 · gera retrabalho</span>
+  <span><i class="p3"></i>P3 · nice-to-have</span>
+</div>
+
+<section>
+  <div class="shead"><span class="sn">01</span><h2>Gaps para implementar</h2></div>
+  <p class="sub">Ordem de prioridade. Marque cada item conforme resolver — o progresso salva no navegador.</p>
+
+  <div class="gaps">
+
+    <div class="gp" data-id="1">
+      <div class="gh">
+        <span class="gnn">01</span>
+        <span class="gtxt">Gate "12 meses de ativação" não existe na API</span>
+        <span class="prio p1">P1 · trava ciclo</span>
+      </div>
+      <div class="body">
+        <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 02 · "Primeira execução" e "Ativado durante o bloqueio"</span></div>
+        <div class="row"><span class="rk">Como é hoje</span><span class="rv dim">Cruzamento externo com <code>listing_status.activation_date</code> — feito no data-lake, não no Sapron</span></div>
+        <div class="row"><span class="rk">Risco</span><span class="rv dim">Imóvel ativado em jul/26 pode ser cobrado em set/26 sem ter 12m</span></div>
+        <div class="row"><span class="rk">Endpoint sugerido</span><span class="rv"><code>GET /api/v1/maintenance/?property_min_age_months=12</code> como filtro nativo</span></div>
+      </div>
+      <div class="todo">
+        <span class="tl">Critério de aceite</span>
+        <div class="item"><input type="checkbox" id="i1a"><label for="i1a">Filtro <code>property_min_age_months</code> aceita inteiro e barra imóveis mais novos</label></div>
+        <div class="item"><input type="checkbox" id="i1b"><label for="i1b">Campo <code>property.activation_date</code> exposto no payload do card</label></div>
+        <div class="item"><input type="checkbox" id="i1c"><label for="i1c">Regra "ativado dez–mar entra só em abr" documentada no swagger</label></div>
+      </div>
+      <button class="btn-done" onclick="toggleDone(1)"></button>
+    </div>
+
+    <div class="gp" data-id="2">
+      <div class="gh">
+        <span class="gnn">02</span>
+        <span class="gtxt">Sem motor único das 4 perguntas do gate</span>
+        <span class="prio p1">P1 · trava ciclo</span>
+      </div>
+      <div class="body">
+        <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 03 · "Já foi lançado? — 4 perguntas, nessa ordem"</span></div>
+        <div class="row"><span class="rk">Como é hoje</span><span class="rv dim">Cada pergunta consulta fonte diferente sem orquestração. Reflexo: 74% de cancelamento no monitor da Central</span></div>
+        <div class="row"><span class="rk">Perguntas</span><span class="rv dim">1) idade · 2) item no cadastro · 3) despesa no ciclo · 4) manutenção sem despesa</span></div>
+        <div class="row"><span class="rk">Endpoint sugerido</span><span class="rv"><code>POST /api/v1/maintenance/preview-cycle</code> retorna quem entra, quem barra e em qual pergunta parou</span></div>
+      </div>
+      <div class="todo">
+        <span class="tl">Critério de aceite</span>
+        <div class="item"><input type="checkbox" id="i2a"><label for="i2a">Endpoint aplica as 4 perguntas <b>em ordem</b> (para na primeira barra)</label></div>
+        <div class="item"><input type="checkbox" id="i2b"><label for="i2b">Retorna contadores por pergunta (barrados, seguem)</label></div>
+        <div class="item"><input type="checkbox" id="i2c"><label for="i2c">Payload por imóvel inclui <code>barred_at_question</code> quando aplicável</label></div>
+        <div class="item"><input type="checkbox" id="i2d"><label for="i2d">Ciclo (item + mês) é parâmetro obrigatório</label></div>
+      </div>
+      <button class="btn-done" onclick="toggleDone(2)"></button>
+    </div>
+
+    <div class="gp" data-id="3">
+      <div class="gh">
+        <span class="gnn">03</span>
+        <span class="gtxt">Cadência ter-qui-sáb não é disparada pelo sistema</span>
+        <span class="prio p1">P1 · trava ciclo</span>
+      </div>
+      <div class="body">
+        <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 04 · "3 · Cadença de comunicação"</span></div>
+        <div class="row"><span class="rk">Como é hoje</span><span class="rv dim">Manual do BackOffice. Não tem garantia de que a franquia recebeu antes do card abrir</span></div>
+        <div class="row"><span class="rk">Regra do processo</span><span class="rv dim">Ter (comunicado) · Qui (reforço) · Sáb (alerta) · 1ª seg útil (abertura). 1 mensagem por franqueado com lista de imóveis no corpo</span></div>
+        <div class="row"><span class="rk">Endpoint sugerido</span><span class="rv"><code>POST /api/v1/maintenance/notifications/dispatch</code> agrupado por <code>franchise_id</code></span></div>
+      </div>
+      <div class="todo">
+        <span class="tl">Critério de aceite</span>
+        <div class="item"><input type="checkbox" id="i3a"><label for="i3a">Job/cron dispara ter-qui-sáb da semana anterior à 1ª segunda útil</label></div>
+        <div class="item"><input type="checkbox" id="i3b"><label for="i3b">Payload: 1 registro por franqueado com lista de imóveis do ciclo</label></div>
+        <div class="item"><input type="checkbox" id="i3c"><label for="i3c">Log de envio auditável (quem recebeu, quando, canal)</label></div>
+        <div class="item"><input type="checkbox" id="i3d"><label for="i3d">Canal e template do texto vêm do BackOffice (decisão 2 em aberto)</label></div>
+      </div>
+      <button class="btn-done" onclick="toggleDone(3)"></button>
+    </div>
+
+    <div class="gp" data-id="4">
+      <div class="gh">
+        <span class="gnn">04</span>
+        <span class="gtxt">SLA da franquia não congela quando Manutenção atrasa</span>
+        <span class="prio p1">P1 · trava ciclo</span>
+      </div>
+      <div class="body">
+        <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 07 · "2 dias úteis · Manutenção valida — estourou, o relógio da franquia congela"</span></div>
+        <div class="row"><span class="rk">Como é hoje</span><span class="rv dim">Franquia perde dias por atraso interno da Seazone. Não existe pausa de relógio</span></div>
+        <div class="row"><span class="rk">Regra do processo</span><span class="rv dim">Manutenção tem 2 du para validar. Após estourar, relógio da franquia pausa até devolução sair. Devolvida, mantém prazo original com piso de 3 du</span></div>
+        <div class="row"><span class="rk">Endpoint sugerido</span><span class="rv"><code>PATCH /api/v1/maintenance/{id}/pause</code> + campo <code>sla_paused_at</code> no card</span></div>
+      </div>
+      <div class="todo">
+        <span class="tl">Critério de aceite</span>
+        <div class="item"><input type="checkbox" id="i4a"><label for="i4a">Card ganha campos <code>sla_paused_at</code>, <code>sla_resumed_at</code>, <code>sla_paused_total_days</code></label></div>
+        <div class="item"><input type="checkbox" id="i4b"><label for="i4b">Pausa automática quando 2 du de validação estouram</label></div>
+        <div class="item"><input type="checkbox" id="i4c"><label for="i4c">Retorno de devolução aplica piso de 3 du</label></div>
+        <div class="item"><input type="checkbox" id="i4d"><label for="i4d">Cálculo de vencimento leva pausa em conta</label></div>
+      </div>
+      <button class="btn-done" onclick="toggleDone(4)"></button>
+    </div>
+
+    <div class="gp" data-id="5">
+      <div class="gh">
+        <span class="gnn">05</span>
+        <span class="gtxt">Escalonamento D+7 / D+14 / D+21 sem regra codificada</span>
+        <span class="prio p2">P2 · retrabalho</span>
+      </div>
+      <div class="body">
+        <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 05 · "Passou do prazo"</span></div>
+        <div class="row"><span class="rk">Como é hoje</span><span class="rv dim">API só grava timestamp. Escalonamento é acionado no olho pelo BackOffice</span></div>
+        <div class="row"><span class="rk">Bloqueio</span><span class="rv dim">Decisão 3 do processo ainda em aberto (o que acontece depois do D+21). Sem regra, não dá pra automatizar 100%</span></div>
+        <div class="row"><span class="rk">Endpoint sugerido</span><span class="rv"><code>GET /api/v1/maintenance/overdue?bucket=d7|d14|d21|post</code> + webhook por bucket</span></div>
+      </div>
+      <div class="todo">
+        <span class="tl">Critério de aceite</span>
+        <div class="item"><input type="checkbox" id="i5a"><label for="i5a">Endpoint separa cards em buckets D+7, D+14, D+21, pós-D+21</label></div>
+        <div class="item"><input type="checkbox" id="i5b"><label for="i5b">Lembrete D+7 automático para o e-mail da franquia</label></div>
+        <div class="item"><input type="checkbox" id="i5c"><label for="i5c">D+14 marca BackOffice, D+21 marca Coordenação (destinatário parametrizável)</label></div>
+        <div class="item"><input type="checkbox" id="i5d"><label for="i5d">Pós-D+21 reenvia a cada 7d enquanto card estiver aberto</label></div>
+      </div>
+      <button class="btn-done" onclick="toggleDone(5)"></button>
+    </div>
+
+    <div class="gp" data-id="6">
+      <div class="gh">
+        <span class="gnn">06</span>
+        <span class="gtxt">Validação de certificado (CNPJ + RT) é 100% humana</span>
+        <span class="prio p2">P2 · retrabalho</span>
+      </div>
+      <div class="body">
+        <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 06 · "Documento regulado · RDC 52/2009 · Portaria nº 5/2017"</span></div>
+        <div class="row"><span class="rk">Como é hoje</span><span class="rv dim">Manutenção confere olho no olho. Certificado com CNPJ inativo passa se ninguém pegar</span></div>
+        <div class="row"><span class="rk">Itens obrigatórios</span><span class="rv dim">Caixa d'água · Dedetização — anexo com CNPJ ativo + responsável técnico registrado no conselho + data dentro do ciclo + imóvel identificado</span></div>
+        <div class="row"><span class="rk">Endpoint sugerido</span><span class="rv"><code>POST /api/v1/maintenance/{id}/validate-certificate</code> — bate CNPJ na Receita e RT no conselho</span></div>
+      </div>
+      <div class="todo">
+        <span class="tl">Critério de aceite</span>
+        <div class="item"><input type="checkbox" id="i6a"><label for="i6a">Card exige anexo tipo "certificado" para caixa d'água e dedetização</label></div>
+        <div class="item"><input type="checkbox" id="i6b"><label for="i6b">Extração de CNPJ do PDF/imagem + consulta na Receita (ativo/inativo)</label></div>
+        <div class="item"><input type="checkbox" id="i6c"><label for="i6c">Flag <code>certificate_status</code>: ok / cnpj_inativo / sem_rt / data_fora_ciclo</label></div>
+        <div class="item"><input type="checkbox" id="i6d"><label for="i6d">Devolve automático se status ≠ ok</label></div>
+      </div>
+      <button class="btn-done" onclick="toggleDone(6)"></button>
+    </div>
+
+    <div class="gp" data-id="7">
+      <div class="gh">
+        <span class="gnn">07</span>
+        <span class="gtxt">Próxima entrada +12m: agendamento não confirmado</span>
+        <span class="prio p3">P3 · nice-to-have</span>
+      </div>
+      <div class="body">
+        <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 08 · "próxima entrada agendada no mesmo mês do ano seguinte"</span></div>
+        <div class="row"><span class="rk">Como é hoje</span><span class="rv dim">Pode ser que dependa do cron mensal recriar o card. Confirmar com o dev</span></div>
+        <div class="row"><span class="rk">Objetivo</span><span class="rv dim">Fechar um card já deixa o próximo agendado, com data prevista visível no cadastro do imóvel</span></div>
+        <div class="row"><span class="rk">Endpoint sugerido</span><span class="rv">Ao mover card para <code>finalizado</code>, criar entrada em <code>maintenance_schedule</code> com <code>due_date = today + 12 meses</code></span></div>
+      </div>
+      <div class="todo">
+        <span class="tl">Critério de aceite</span>
+        <div class="item"><input type="checkbox" id="i7a"><label for="i7a">Fechamento de card gera registro em <code>maintenance_schedule</code></label></div>
+        <div class="item"><input type="checkbox" id="i7b"><label for="i7b">Cadastro do imóvel mostra próxima manutenção prevista por item</label></div>
+        <div class="item"><input type="checkbox" id="i7c"><label for="i7c">Cron mensal só cria card se não houver agendamento aberto</label></div>
+      </div>
+      <button class="btn-done" onclick="toggleDone(7)"></button>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="shead"><span class="sn">02</span><h2>Contexto de referência</h2></div>
+  <p class="sub">Documentos que o dev precisa ao lado.</p>
+  <div class="note">
+    <span class="lbl">Fontes</span>
+    <p><b>Processo de Manutenção Recorrente v2.1</b> · 17/09/2026 — autoria Ray, revisão técnica Vinicius</p>
+    <p><b>API atual:</b> <code>https://api.sapron.com.br/api/v1/maintenance/</code> — hoje retorna 401 sem token</p>
+    <p><b>Tabela do lake que já resolve o gate 1:</b> <code>sirius.saprondata.listing_status</code> — campos <code>activation_date</code>, <code>churn</code>, <code>code</code> (id_seazone)</p>
+    <p><b>Categoria de despesa conhecida:</b> <code>financial_expenses</code> cat 2 (Enxoval), subcat 12 (REPOSIÇÃO), 13 (DANO). Mapear categorias de manutenção item a item</p>
+  </div>
+  <div class="note warn">
+    <span class="lbl">Decisões em aberto no processo (não são do dev)</span>
+    <p>Filtro de água + caixa d'água (semestral vs revisão/troca) · Cadência de comunicação (canal, remetente, texto) · O que acontece depois do D+21 · Rateio e reembolso · Fechadura eletrônica · Troca de pilhas · Regulação estadual. <b>Enquanto essas 7 não fecharem, itens 3 e 5 do check ficam parciais.</b></p>
+  </div>
+</section>
+
+<p class="foot">v1.0 · 25/09/2026 · <b>Ray</b> (BackOffice Franquias) · complemento técnico ao Processo de Manutenção Recorrente v2.1.</p>
+
+</div>
+
+<script>
+const KEY='sapron_check_v1';
+const state=JSON.parse(localStorage.getItem(KEY)||'{}');
+
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProg();}
+function updateProg(){
+  const gaps=document.querySelectorAll('.gp');
+  const doneCount=[...gaps].filter(g=>g.dataset.done==='1').length;
+  document.getElementById('done').textContent=doneCount;
+  document.getElementById('total').textContent=gaps.length;
+  document.getElementById('fill').style.width=(doneCount/gaps.length*100)+'%';
+}
+function toggleDone(id){
+  const el=document.querySelector('.gp[data-id="'+id+'"]');
+  const on=el.dataset.done!=='1';
+  el.dataset.done=on?'1':'0';
+  state['g'+id]=on;
+  save();
+}
+function resetAll(){
+  if(!confirm('Limpar todos os checks?'))return;
+  localStorage.removeItem(KEY);
+  document.querySelectorAll('.gp').forEach(el=>el.dataset.done='0');
+  document.querySelectorAll('input[type=checkbox]').forEach(i=>i.checked=false);
+  updateProg();
+}
+
+// restore
+document.querySelectorAll('.gp').forEach(el=>{
+  const id=el.dataset.id;
+  if(state['g'+id]) el.dataset.done='1';
+});
+document.querySelectorAll('input[type=checkbox]').forEach(i=>{
+  if(state[i.id]) i.checked=true;
+  i.addEventListener('change',()=>{state[i.id]=i.checked;save();});
+});
+updateProg();
+</script>
