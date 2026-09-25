@@ -76,6 +76,11 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
 .gp .prio.p1{background:var(--coral-soft);color:var(--coral-ink);border:1px solid var(--coral-line)}
 .gp .prio.p2{background:var(--amber-soft);color:var(--amber-ink);border:1px solid var(--amber-line)}
 .gp .prio.p3{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--rule-2)}
+.gp .origin{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.gp .origin::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.gp .origin.sys{background:var(--brand-soft);color:var(--brand-ink);border:1px solid var(--brand-line)}
+.gp .origin.pro{background:#F5E6FA;color:#7B2CBF;border:1px solid #D9AEEA}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gp .origin.pro{background:#2E1A38;color:#C9A0DC;border-color:#5B3A6E}}
 
 .gp .body{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;padding-top:6px}
 .gp .row{display:flex;flex-direction:column;gap:3px}
@@ -122,9 +127,9 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
 <header class="mast">
   <p class="kicker">Seazone · Sapron · API v1 · Manutenção Recorrente</p>
   <h1>Check-list para o desenvolvedor</h1>
-  <p class="deck">7 gaps entre a API <code>/maintenance/</code> e o Processo v2.1. Cada item lista o que falta implementar, referência do processo e critério de aceite.</p>
+  <p class="deck">7 gaps entre a API <code>/maintenance/</code> e o Processo v2.1. Cada item indica se a origem do problema está no <b>Sistema</b> (Sapron não implementa) ou no <b>Processo</b> (regra ainda em aberto).</p>
   <div class="badges">
-    <span class="badge b">v1.0 · 25/09/2026</span>
+    <span class="badge b">v1.1 · 25/09/2026</span>
     <span class="badge r">4 críticos</span>
     <span class="badge a">2 médios</span>
     <span class="badge g">1 leve</span>
@@ -147,6 +152,10 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
   <span><i class="p1"></i>P1 · trava ciclo</span>
   <span><i class="p2"></i>P2 · gera retrabalho</span>
   <span><i class="p3"></i>P3 · nice-to-have</span>
+  <span style="margin-left:auto;display:inline-flex;gap:14px">
+    <span><i style="background:var(--brand)"></i>origem <b>Sistema</b> · Sapron não implementa</span>
+    <span><i style="background:#7B2CBF"></i>origem <b>Processo</b> · regra em aberto</span>
+  </span>
 </div>
 
 <section>
@@ -160,6 +169,7 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <span class="gnn">01</span>
         <span class="gtxt">Gate "12 meses de ativação" não existe na API</span>
         <span class="prio p1">P1 · trava ciclo</span>
+        <span class="origin sys">Sistema</span>
       </div>
       <div class="body">
         <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 02 · "Primeira execução" e "Ativado durante o bloqueio"</span></div>
@@ -181,6 +191,7 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <span class="gnn">02</span>
         <span class="gtxt">Sem motor único das 4 perguntas do gate</span>
         <span class="prio p1">P1 · trava ciclo</span>
+        <span class="origin sys">Sistema</span>
       </div>
       <div class="body">
         <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 03 · "Já foi lançado? — 4 perguntas, nessa ordem"</span></div>
@@ -203,6 +214,8 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <span class="gnn">03</span>
         <span class="gtxt">Cadência ter-qui-sáb não é disparada pelo sistema</span>
         <span class="prio p1">P1 · trava ciclo</span>
+        <span class="origin sys">Sistema</span>
+        <span class="origin pro">Processo</span>
       </div>
       <div class="body">
         <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 04 · "3 · Cadença de comunicação"</span></div>
@@ -225,6 +238,7 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <span class="gnn">04</span>
         <span class="gtxt">SLA da franquia não congela quando Manutenção atrasa</span>
         <span class="prio p1">P1 · trava ciclo</span>
+        <span class="origin sys">Sistema</span>
       </div>
       <div class="body">
         <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 07 · "2 dias úteis · Manutenção valida — estourou, o relógio da franquia congela"</span></div>
@@ -247,6 +261,8 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <span class="gnn">05</span>
         <span class="gtxt">Escalonamento D+7 / D+14 / D+21 sem regra codificada</span>
         <span class="prio p2">P2 · retrabalho</span>
+        <span class="origin pro">Processo</span>
+        <span class="origin sys">Sistema</span>
       </div>
       <div class="body">
         <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 05 · "Passou do prazo"</span></div>
@@ -269,6 +285,7 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <span class="gnn">06</span>
         <span class="gtxt">Validação de certificado (CNPJ + RT) é 100% humana</span>
         <span class="prio p2">P2 · retrabalho</span>
+        <span class="origin sys">Sistema</span>
       </div>
       <div class="body">
         <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 06 · "Documento regulado · RDC 52/2009 · Portaria nº 5/2017"</span></div>
@@ -291,6 +308,7 @@ h2{font-size:clamp(19px,3.1vw,24px);letter-spacing:-.016em}
         <span class="gnn">07</span>
         <span class="gtxt">Próxima entrada +12m: agendamento não confirmado</span>
         <span class="prio p3">P3 · nice-to-have</span>
+        <span class="origin sys">Sistema</span>
       </div>
       <div class="body">
         <div class="row"><span class="rk">Referência no processo</span><span class="rv">Seção 08 · "próxima entrada agendada no mesmo mês do ano seguinte"</span></div>
